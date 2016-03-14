@@ -1,0 +1,4 @@
+#!/bin/sh
+curl -s https://center.vodafone.de/vfcenter/index.html?browser=web \
+  | xmllint --html --xpath 'concat(//*[@class="data-info"]//*[@class="count"][1]/text(), " / ", //*[@class="data-info"]//*[@class="count"][2]/text())' /dev/stdin 2>/dev/null
+echo "";
