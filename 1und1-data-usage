@@ -1,4 +1,12 @@
 #!/bin/sh
-curl -s https://center.vodafone.de/vfcenter/index.html?browser=web \
-  | xmllint --html --xpath 'concat(//*[@class="data-info"]//*[@class="count"][1]/text(), " / ", //*[@class="data-info"]//*[@class="count"][2]/text())' /dev/stdin 2>/dev/null
+# extract target link
+link=$(
+  curl -s https://center.vodafone.de/vfcenter/index.html?browser=web \
+    | xmllint --html --xpath 'string(//body//a/@href)' /dev/stdin 2>/dev/null
+)
+if [ -n "$link" ]
+then
+  curl -sL "$link" |
+    xmllint --html --xpath 'normalize-space(concat(//*[@class="volume consumption"]//*[@class="mc-headline-a3"]/text(), " / ", //*[@class="volume consumption"]//*[@class="headline-a3"]/text()))' /dev/stdin 2>/dev/null
+fi
 echo "";
